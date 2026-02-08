@@ -89,9 +89,9 @@ export function updateFluencyRate(
   correct: boolean
 ): number {
   if (correct) {
-    return currentRate === null ? 0.8 : currentRate * 0.9 + 0.1
+    return currentRate === null ? 0.9 : currentRate * 0.9 + 0.1
   } else {
-    return currentRate === null ? 0.2 : currentRate * 0.9
+    return currentRate === null ? 0.1 : currentRate * 0.9
   }
 }
 

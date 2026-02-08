@@ -19,8 +19,8 @@ Don't use fixed position in css.
         - background color: Each letter has a fluency rate
             - A background color indicator will reflect this fluency rate (r)
                 - null (default) no color
-                - r < 90% yellow
-                - r >= 90% green
+                - r < 0.9 yellow
+                - r >= 0.9 green
             - The calculation of fluency rate is
             - Store all fluency rates in a json, like this {"a": 0.8, "b": 0.9 ...}
             - Read and Write fluency rate from localstorage
@@ -53,10 +53,10 @@ Don't use fixed position in css.
     - show error and show the right answer with the PNG/PNGs.
     - For each letter that the user get right or wrong re-calcuate the fluency with exponential decay
         - right
-            - if rate is null, then the fluency rate is 0.8
+            - if rate is null, then the fluency rate is 0.9
             - Otherwise r = r * 0.9 + 0.1
         - wrong
-            - if rate is null, then the fluency rate is 0.2
+            - if rate is null, then the fluency rate is 0.1
             - Otherwise r = r * 0.9
 - We could show a word or a letter depending on
     - If we show a letter, the lower the fluency rate, the higher chance of the letter should show up.
