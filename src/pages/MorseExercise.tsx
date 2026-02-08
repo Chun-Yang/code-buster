@@ -48,6 +48,7 @@ export default function MorseExercise() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const [focusedIndex, setFocusedIndex] = useState(0)
   const [showHelp, setShowHelp] = useState(false)
+  const [frozenHelpLetter, setFrozenHelpLetter] = useState('')
 
   // Reset inputs when currentIndex changes, then focus first input
   useEffect(() => {
@@ -307,17 +308,22 @@ export default function MorseExercise() {
     return expectedLetters[focusedIndex]
   }
 
-  const helpLetter = getHelpLetter()
-  const helpCell = showHelp && helpLetter && (
+  function handleHelpClick() {
+    const letter = getHelpLetter()
+    setFrozenHelpLetter(letter)
+    setShowHelp(true)
+  }
+
+  const helpCell = showHelp && frozenHelpLetter && (
         <div className="help-cell">
           <div className="morse-cell">
-            <span className="letter">{helpLetter}</span>
-            <img src={pngPath(helpLetter)} alt={helpLetter} />
+            <span className="letter">{frozenHelpLetter}</span>
+            <img src={pngPath(frozenHelpLetter)} alt={frozenHelpLetter} />
             <span className="mnemonic">
-              <b>{PNG_FILES[helpLetter][0]}</b>
-              {PNG_FILES[helpLetter].replace('.png', '').slice(1)}
+              <b>{PNG_FILES[frozenHelpLetter][0]}</b>
+              {PNG_FILES[frozenHelpLetter].replace('.png', '').slice(1)}
             </span>
-            <span className="code">{MORSE_CODE[helpLetter]}</span>
+            <span className="code">{MORSE_CODE[frozenHelpLetter]}</span>
           </div>
         </div>
       )
@@ -331,8 +337,8 @@ export default function MorseExercise() {
         <span className="exercise-type">
           {direction} {unit}
         </span>
-        <button className="btn" onClick={() => setShowHelp(true)}>
-          Help
+        <button className="btn" onClick={showHelp ? () => setShowHelp(false) : handleHelpClick}>
+          {showHelp ? 'Hide Help' : 'Help'}
         </button>
       </div>
 
