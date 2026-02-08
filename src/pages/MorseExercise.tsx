@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { useLocation, useRoute } from 'wouter'
 import {
   MORSE_CODE,
+  PNG_FILES,
   readFluencyRates,
   writeFluencyRates,
   updateFluencyRate,
@@ -46,6 +47,7 @@ export default function MorseExercise() {
   )
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const [focusedIndex, setFocusedIndex] = useState(0)
+  const [showHelp, setShowHelp] = useState(false)
 
   // Reset inputs when currentIndex changes, then focus first input
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function MorseExercise() {
     setInputs(Array(len).fill(''))
     setErrors(Array(len).fill(false))
     setFocusedIndex(0)
+    setShowHelp(false)
     requestAnimationFrame(() => {
       inputRefs.current[0]?.focus()
     })
@@ -115,6 +118,7 @@ export default function MorseExercise() {
     if (feedback !== null) return
     const char = value.slice(-1).toUpperCase()
     if (!char.match(/[A-Z]/)) return
+    setShowHelp(false)
 
     const newInputs = [...inputs]
     newInputs[index] = char
@@ -136,6 +140,7 @@ export default function MorseExercise() {
   function handleEncodeInput(index: number, value: string) {
     if (feedback !== null) return
     // Only allow . - and space
+    setShowHelp(false)
     const filtered = value.replace(/[^.\- ]/g, '')
     const newInputs = [...inputs]
     newInputs[index] = filtered
@@ -235,6 +240,7 @@ export default function MorseExercise() {
   // Morse button inserts into the currently focused encode input
   function handleMorseButton(char: string) {
     if (feedback !== null) return
+    setShowHelp(false)
     const idx = focusedIndex
     const newInputs = [...inputs]
     newInputs[idx] = (newInputs[idx] ?? '') + char
@@ -293,6 +299,29 @@ export default function MorseExercise() {
 
   const morseCodes = getMorseCodes()
 
+  // Help: most relevant letter is focused input, or first empty input
+  function getHelpLetter(): string {
+    if (inputs[focusedIndex]?.trim() === '') return expectedLetters[focusedIndex]
+    const firstEmpty = inputs.findIndex((v) => v.trim() === '')
+    if (firstEmpty >= 0) return expectedLetters[firstEmpty]
+    return expectedLetters[focusedIndex]
+  }
+
+  const helpLetter = getHelpLetter()
+  const helpCell = showHelp && helpLetter && (
+        <div className="help-cell">
+          <div className="morse-cell">
+            <span className="letter">{helpLetter}</span>
+            <img src={pngPath(helpLetter)} alt={helpLetter} />
+            <span className="mnemonic">
+              <b>{PNG_FILES[helpLetter][0]}</b>
+              {PNG_FILES[helpLetter].replace('.png', '').slice(1)}
+            </span>
+            <span className="code">{MORSE_CODE[helpLetter]}</span>
+          </div>
+        </div>
+      )
+
   return (
     <div>
       <div className="exercise-header">
@@ -305,6 +334,9 @@ export default function MorseExercise() {
         <span className="exercise-progress">
           {currentIndex + 1} / {units.length}
         </span>
+        <button className="btn" onClick={() => setShowHelp(true)}>
+          Help
+        </button>
       </div>
 
       {direction === 'decode' ? (
@@ -327,6 +359,7 @@ export default function MorseExercise() {
               </div>
             ))}
           </div>
+          {helpCell}
         </>
       ) : (
         <>
@@ -343,11 +376,11 @@ export default function MorseExercise() {
                   onKeyDown={(e) => handleEncodeKeyDown(i, e)}
                   onFocus={() => handleFocus(i)}
                   disabled={feedback !== null}
-                  placeholder={MORSE_CODE[letter]}
                 />
               </div>
             ))}
           </div>
+          {helpCell}
 
           <div className="morse-buttons">
             <button onClick={() => handleMorseButton('.')}>.</button>

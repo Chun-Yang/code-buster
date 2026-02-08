@@ -67,3 +67,4 @@ Don't use fixed position in css.
 - About the input:
     - For "decode", show the same amount of inputs, each input corresponds to a morse code. When a user type in a letter, jump to the next letter. If a user click into a input, change the existing letter as placeholder and allow user to override. After override, the cursor should jump to the next empty input. Show a red border when a input is incorrect. When all inputs are provided correctly, move to the next exercise directly. auto focus on the first letter. Allow delete for input too.
     - For "encode", also use a input for each morse code similar to "decode"
+- Provide a help button. On click, show morse code cell in MorseHome for the most relevant letter. The most relevant letter is either the current select input or the first empty input. After the user provides any input, close the help section.
