@@ -14,8 +14,8 @@ Don't use fixed position in css.
 - Need a way to show 26 Chars and their Morse code
     - For each char, we need to show a cell that contains the following info:
         - char (e.g. A)
-        - morse code (.-)
         - png, each char has a corresponding png in public/morse that starts with it.
+        - The image name without the suffix.
         - background color: Each letter has a fluency rate
             - A background color indicator will reflect this fluency rate (r)
                 - null (default) no color

@@ -1,5 +1,5 @@
 import { Link } from 'wouter'
-import { LETTERS, MORSE_CODE, readFluencyRates, pngPath } from '../morse'
+import { LETTERS, PNG_FILES, readFluencyRates, pngPath } from '../morse'
 
 export default function MorseHome() {
   const rates = readFluencyRates()
@@ -23,8 +23,8 @@ export default function MorseHome() {
         {LETTERS.map((letter) => (
           <div key={letter} className={cellClass(letter)}>
             <span className="letter">{letter}</span>
-            <span className="code">{MORSE_CODE[letter]}</span>
             <img src={pngPath(letter)} alt={letter} />
+            <span className="mnemonic"><b>{PNG_FILES[letter][0]}</b>{PNG_FILES[letter].replace('.png', '').slice(1)}</span>
           </div>
         ))}
       </div>
