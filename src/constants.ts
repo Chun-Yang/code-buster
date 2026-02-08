@@ -60,7 +60,7 @@ export const words = [
   "australia",
   "author",
   "auto",
-  "availability"
+  "availability",
   "available",
   "average",
   "away",

@@ -1,20 +1,27 @@
 ## Description
 This is a web app to help kids to learn encoding and decoding written morse code.
 This is a mobile first app. If the screen width is too large, we limit it to 64rem.
+Don't use fixed position in css.
+
+## Tech stack
+- react
+- router: wouter
+- typescript
+- no server, no login, a pure client app
 
 ## Screen 1: main/default screen to show morse code fluency and start an exercise
 - path "/morse", "/" redirects to "/morse"
 - Need a way to show 26 Chars and their Morse code
-    - For each char, we need to show the
-        - char
-        - morse code
+    - For each char, we need to show a cell that contains the following info:
+        - char (e.g. A)
+        - morse code (.-)
         - png, each char has a corresponding png in public/morse that starts with it.
-        - each letter has a fluency rate
-            - A color indicator will reflect this fluency rate (r)
+        - background color: Each letter has a fluency rate
+            - A background color indicator will reflect this fluency rate (r)
                 - null (default) no color
                 - r < 90% yellow
                 - r >= 90% green
-            - The calculation of fluency rate is 
+            - The calculation of fluency rate is
             - Store all fluency rates in a json, like this {"a": 0.8, "b": 0.9 ...}
             - Read and Write fluency rate from localstorage
 - Need a button to start exercise, when clicked "exercise configeration screen" will show.
@@ -27,7 +34,7 @@ This is a mobile first app. If the screen width is too large, we limit it to 64r
     - When the user selects this button, the user will be redirected to "/morse-exercise" with the following query params
         - direction "encode" or "decode"
         - unit "word" or "letter"
-- A button to go back
+- A button to go back at top left
 
 ## Screen 3: exercise screen
 - path "/morse-exercise"
@@ -51,7 +58,7 @@ This is a mobile first app. If the screen width is too large, we limit it to 64r
         - wrong
             - if rate is null, then the fluency rate is 0.2
             - Otherwise r = r * 0.9
-- We could show a word or a letter depending on 
+- We could show a word or a letter depending on
     - If we show a letter, the lower the fluency rate, the higher chance of the letter should show up.
 - If it's encode, show english and let user type in morse code
 - If it's decode, show morse code and let user type in english
