@@ -1,6 +1,6 @@
 # code-buster
 
-A React application deployed on GitHub Pages.
+A React + TypeScript application deployed on GitHub Pages.
 
 ## Development
 
