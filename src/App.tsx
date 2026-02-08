@@ -12,7 +12,7 @@ function App() {
         <Switch>
           <Route path="/morse" component={MorseHome} />
           <Route path="/morse-config" component={MorseConfig} />
-          <Route path="/morse-exercise" component={MorseExercise} />
+          <Route path="/morse-exercise/:direction/:unit" component={MorseExercise} />
           <Route path="/">
             <Redirect to="/morse" />
           </Route>

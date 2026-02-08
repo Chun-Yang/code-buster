@@ -13,7 +13,7 @@ export default function MorseConfig() {
   const [, setLocation] = useLocation()
 
   function handleStart() {
-    setLocation(`/morse-exercise?direction=${direction}&unit=${unit}`)
+    setLocation(`/morse-exercise/${direction}/${unit}`)
   }
 
   return (

@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
-import { useLocation } from 'wouter'
+import { useLocation, useRoute } from 'wouter'
 import {
   MORSE_CODE,
   readFluencyRates,
@@ -13,11 +13,9 @@ import {
 } from '../morse'
 
 export default function MorseExercise() {
-  const hash = window.location.hash
-  const queryString = hash.includes('?') ? hash.split('?')[1] : ''
-  const params = new URLSearchParams(queryString)
-  const direction = params.get('direction') === 'encode' ? 'encode' : 'decode'
-  const unit = params.get('unit') === 'word' ? 'word' : 'letter'
+  const [, routeParams] = useRoute('/morse-exercise/:direction/:unit')
+  const direction = routeParams?.direction === 'encode' ? 'encode' : 'decode'
+  const unit = routeParams?.unit === 'word' ? 'word' : 'letter'
   const [, setLocation] = useLocation()
 
   const [rates, setRates] = useState<FluencyRates>(readFluencyRates)
