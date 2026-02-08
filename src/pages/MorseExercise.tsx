@@ -11,6 +11,8 @@ import {
   pngPath,
   FluencyRates,
 } from '../morse'
+import DecodeExercise from '../components/DecodeExercise'
+import EncodeExercise from '../components/EncodeExercise'
 
 export default function MorseExercise() {
   const [, routeParams] = useRoute('/morse-exercise/:direction/:unit')
@@ -38,7 +40,6 @@ export default function MorseExercise() {
   const expectedLetters = currentUnit.toUpperCase().split('')
   const letterCount = expectedLetters.length
 
-  // Per-letter inputs (used for both encode and decode)
   const [inputs, setInputs] = useState<string[]>(() =>
     Array(letterCount).fill('')
   )
@@ -50,7 +51,6 @@ export default function MorseExercise() {
   const [showHelp, setShowHelp] = useState(false)
   const [frozenHelpLetter, setFrozenHelpLetter] = useState('')
 
-  // Reset inputs when currentIndex changes, then focus first input
   useEffect(() => {
     const len = (units[currentIndex] ?? '').length
     setInputs(Array(len).fill(''))
@@ -114,79 +114,6 @@ export default function MorseExercise() {
     }
   }
 
-  // Decode: single letter per input
-  function handleDecodeInput(index: number, value: string) {
-    if (feedback !== null) return
-    const char = value.slice(-1).toUpperCase()
-    if (!char.match(/[A-Z]/)) return
-    setShowHelp(false)
-
-    const newInputs = [...inputs]
-    newInputs[index] = char
-    setInputs(newInputs)
-
-    const isCorrect = char === expectedLetters[index]
-    const newErrors = [...errors]
-    newErrors[index] = !isCorrect
-    setErrors(newErrors)
-
-    checkAllCorrect(newInputs)
-
-    if (isCorrect) {
-      jumpToNextEmpty(newInputs, index)
-    }
-  }
-
-  // Encode: morse code per input, user types via buttons or keyboard
-  function handleEncodeInput(index: number, value: string) {
-    if (feedback !== null) return
-    // Only allow . - and space
-    setShowHelp(false)
-    const filtered = value.replace(/[^.\- ]/g, '')
-    const newInputs = [...inputs]
-    newInputs[index] = filtered
-    setInputs(newInputs)
-
-    const expected = getExpected(index)
-    const isCorrect = filtered.trim() === expected
-    const isWrong = filtered.trim() !== '' && !expected.startsWith(filtered.trim()) && filtered.trim() !== expected
-
-    const newErrors = [...errors]
-    newErrors[index] = isWrong
-    setErrors(newErrors)
-
-    if (isCorrect) {
-      checkAllCorrect(newInputs)
-      jumpToNextEmpty(newInputs, index)
-    }
-  }
-
-  function handleEncodeKeyDown(index: number, e: React.KeyboardEvent) {
-    if (feedback !== null) return
-    if (e.key === 'Backspace') {
-      if (inputs[index] === '' && index > 0) {
-        e.preventDefault()
-        inputRefs.current[index - 1]?.focus()
-      }
-    } else if (e.key === 'Delete') {
-      e.preventDefault()
-      const newInputs = [...inputs]
-      newInputs[index] = ''
-      setInputs(newInputs)
-      const newErrors = [...errors]
-      newErrors[index] = false
-      setErrors(newErrors)
-    } else if (e.key === 'Tab' || e.key === 'Enter') {
-      // Let Tab work naturally; Enter moves to next
-      if (e.key === 'Enter') {
-        e.preventDefault()
-        if (index + 1 < letterCount) {
-          inputRefs.current[index + 1]?.focus()
-        }
-      }
-    }
-  }
-
   function jumpToNextEmpty(newInputs: string[], fromIndex: number) {
     for (let i = fromIndex + 1; i < letterCount; i++) {
       if (newInputs[i].trim() === '') {
@@ -202,29 +129,6 @@ export default function MorseExercise() {
     }
   }
 
-  function handleKeyDown(index: number, e: React.KeyboardEvent) {
-    if (feedback !== null) return
-    if (e.key === 'Backspace' || e.key === 'Delete') {
-      e.preventDefault()
-      if (inputs[index] !== '') {
-        const newInputs = [...inputs]
-        newInputs[index] = ''
-        setInputs(newInputs)
-        const newErrors = [...errors]
-        newErrors[index] = false
-        setErrors(newErrors)
-      } else if (e.key === 'Backspace' && index > 0) {
-        const newInputs = [...inputs]
-        newInputs[index - 1] = ''
-        setInputs(newInputs)
-        const newErrors = [...errors]
-        newErrors[index - 1] = false
-        setErrors(newErrors)
-        inputRefs.current[index - 1]?.focus()
-      }
-    }
-  }
-
   function handleFocus(index: number) {
     setFocusedIndex(index)
     if (feedback !== null) return
@@ -236,45 +140,6 @@ export default function MorseExercise() {
       newErrors[index] = false
       setErrors(newErrors)
     }
-  }
-
-  // Morse button inserts into the currently focused encode input
-  function handleMorseButton(char: string) {
-    if (feedback !== null) return
-    setShowHelp(false)
-    const idx = focusedIndex
-    const newInputs = [...inputs]
-    newInputs[idx] = (newInputs[idx] ?? '') + char
-    setInputs(newInputs)
-
-    const expected = getExpected(idx)
-    const val = newInputs[idx].trim()
-    const isCorrect = val === expected
-    const isWrong = val !== '' && !expected.startsWith(val) && val !== expected
-
-    const newErrors = [...errors]
-    newErrors[idx] = isWrong
-    setErrors(newErrors)
-
-    if (isCorrect) {
-      checkAllCorrect(newInputs)
-      jumpToNextEmpty(newInputs, idx)
-    }
-  }
-
-  function handleMorseBackspace() {
-    if (feedback !== null) return
-    const idx = focusedIndex
-    const newInputs = [...inputs]
-    newInputs[idx] = (newInputs[idx] ?? '').slice(0, -1)
-    setInputs(newInputs)
-
-    const expected = getExpected(idx)
-    const val = newInputs[idx].trim()
-    const isWrong = val !== '' && !expected.startsWith(val) && val !== expected
-    const newErrors = [...errors]
-    newErrors[idx] = isWrong
-    setErrors(newErrors)
   }
 
   if (done) {
@@ -300,7 +165,6 @@ export default function MorseExercise() {
 
   const morseCodes = getMorseCodes()
 
-  // Help: most relevant letter is focused input, or first empty input
   function getHelpLetter(): string {
     if (inputs[focusedIndex]?.trim() === '') return expectedLetters[focusedIndex]
     const firstEmpty = inputs.findIndex((v) => v.trim() === '')
@@ -328,6 +192,24 @@ export default function MorseExercise() {
         </div>
       )
 
+  const inputProps = {
+    expectedLetters,
+    morseCodes,
+    inputs,
+    errors,
+    focusedIndex,
+    feedback,
+    inputRefs,
+    setInputs,
+    setErrors,
+    setShowHelp,
+    handleFocus,
+    checkAllCorrect,
+    jumpToNextEmpty,
+    getExpected,
+    helpCell,
+  }
+
   return (
     <div>
       <div className="exercise-header">
@@ -347,54 +229,9 @@ export default function MorseExercise() {
       </div>
 
       {direction === 'decode' ? (
-        <>
-          <div className="decode-inputs">
-            {morseCodes.map((morse, i) => (
-              <div key={i} className="decode-slot">
-                <span className="decode-morse">{morse}</span>
-                <input
-                  ref={(el) => { inputRefs.current[i] = el }}
-                  className={`decode-letter-input${errors[i] ? ' input-error' : ''}`}
-                  type="text"
-                  maxLength={1}
-                  value={inputs[i]}
-                  onChange={(e) => handleDecodeInput(i, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(i, e)}
-                  onFocus={() => handleFocus(i)}
-                  disabled={feedback !== null}
-                />
-              </div>
-            ))}
-          </div>
-          {helpCell}
-        </>
+        <DecodeExercise {...inputProps} />
       ) : (
-        <>
-          <div className="decode-inputs">
-            {expectedLetters.map((letter, i) => (
-              <div key={i} className="decode-slot">
-                <span className="decode-morse">{letter}</span>
-                <input
-                  ref={(el) => { inputRefs.current[i] = el }}
-                  className={`encode-morse-input${errors[i] ? ' input-error' : ''}${focusedIndex === i ? ' input-focused' : ''}`}
-                  type="text"
-                  value={inputs[i]}
-                  onChange={(e) => handleEncodeInput(i, e.target.value)}
-                  onKeyDown={(e) => handleEncodeKeyDown(i, e)}
-                  onFocus={() => handleFocus(i)}
-                  disabled={feedback !== null}
-                />
-              </div>
-            ))}
-          </div>
-          {helpCell}
-
-          <div className="morse-buttons">
-            <button onClick={() => handleMorseButton('.')}>.</button>
-            <button onClick={() => handleMorseButton('-')}>-</button>
-            <button onClick={handleMorseBackspace}>DEL</button>
-          </div>
-        </>
+        <EncodeExercise {...inputProps} />
       )}
 
       {feedback === 'correct' && (

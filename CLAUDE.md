@@ -62,7 +62,7 @@ Don't use fixed position in css.
     - If we show a letter, the lower the fluency rate, the higher chance of the letter should show up.
 - If it's encode, show english and let user type in morse code
 - If it's decode, show morse code and let user type in english
-- If it's a encode screen, show ".", "-" and " " space as clickable huge buttons at the bottom, the 3 areas should split up the whole width of the screen, height should be 10rem.
+- If it's a encode screen, show ".", "-" and " " space as clickable huge buttons at the bottom, the 3 areas should split up the whole width of the screen.
 - A button at the bottom, but above the 3 clickable buttons if exercise type is encode
 - About the input:
     - For "decode", show the same amount of inputs, each input corresponds to a morse code. When a user type in a letter, jump to the next letter. If a user click into a input, change the existing letter as placeholder and allow user to override. After override, the cursor should jump to the next empty input. Show a red border when a input is incorrect. When all inputs are provided correctly, move to the next exercise directly. auto focus on the first letter. Allow delete for input too.
