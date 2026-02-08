@@ -128,7 +128,7 @@ export default function EncodeExercise({
       <div className="morse-buttons">
         <button onClick={() => handleMorseButton('.')}>.</button>
         <button onClick={() => handleMorseButton('-')}>-</button>
-        <button style={{display: "none"}} onClick={handleMorseBackspace}>DEL</button>
+        <button onClick={handleMorseBackspace}>DEL</button>
       </div>
     </>
   )
