@@ -211,7 +211,7 @@ export default function MorseExercise() {
   }
 
   return (
-    <div>
+    <div className="exercise-page">
       <div className="exercise-header">
         <button className="btn btn-back" onClick={() => setLocation('/morse-config')}>
           Back

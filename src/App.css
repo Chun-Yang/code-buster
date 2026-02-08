@@ -123,6 +123,12 @@
   color: #fff;
 }
 
+.exercise-page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 2rem);
+}
+
 /* Exercise Screen */
 .exercise-header {
   display: flex;
@@ -237,6 +243,9 @@
   width: 100%;
   height: 8rem;
   gap: 2px;
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
 }
 
 .morse-buttons button {
