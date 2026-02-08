@@ -7,7 +7,6 @@ import {
   updateFluencyRate,
   pickLetters,
   pickWords,
-  encodeWord,
   pngPath,
   FluencyRates,
 } from '../morse'
@@ -30,50 +29,44 @@ export default function MorseExercise() {
   }, [])
 
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [answer, setAnswer] = useState('')
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
-  const [correctAnswer, setCorrectAnswer] = useState('')
   const [done, setDone] = useState(false)
   const [score, setScore] = useState(0)
 
-  // Decode mode: per-letter inputs
   const currentUnit = units[currentIndex] ?? ''
   const expectedLetters = currentUnit.toUpperCase().split('')
   const letterCount = expectedLetters.length
 
-  const [decodeInputs, setDecodeInputs] = useState<string[]>(() =>
+  // Per-letter inputs (used for both encode and decode)
+  const [inputs, setInputs] = useState<string[]>(() =>
     Array(letterCount).fill('')
   )
-  const [decodeErrors, setDecodeErrors] = useState<boolean[]>(() =>
+  const [errors, setErrors] = useState<boolean[]>(() =>
     Array(letterCount).fill(false)
   )
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+  const [focusedIndex, setFocusedIndex] = useState(0)
 
-  // Reset decode inputs when currentIndex changes, then focus first input
+  // Reset inputs when currentIndex changes, then focus first input
   useEffect(() => {
     const len = (units[currentIndex] ?? '').length
-    setDecodeInputs(Array(len).fill(''))
-    setDecodeErrors(Array(len).fill(false))
-    if (direction === 'decode') {
-      requestAnimationFrame(() => {
-        inputRefs.current[0]?.focus()
-      })
-    }
-  }, [currentIndex, units, direction])
+    setInputs(Array(len).fill(''))
+    setErrors(Array(len).fill(false))
+    setFocusedIndex(0)
+    requestAnimationFrame(() => {
+      inputRefs.current[0]?.focus()
+    })
+  }, [currentIndex, units])
 
   const getMorseCodes = useCallback((): string[] => {
     return expectedLetters.map((l) => MORSE_CODE[l] ?? '')
   }, [expectedLetters])
 
-  function getExpectedAnswer(): string {
-    if (direction === 'encode') {
-      if (unit === 'letter') {
-        return MORSE_CODE[currentUnit]
-      } else {
-        return encodeWord(currentUnit)
-      }
+  function getExpected(index: number): string {
+    if (direction === 'decode') {
+      return expectedLetters[index]
     } else {
-      return currentUnit.toUpperCase()
+      return MORSE_CODE[expectedLetters[index]] ?? ''
     }
   }
 
@@ -95,136 +88,186 @@ export default function MorseExercise() {
     }
   }
 
+  function goToNext() {
+    if (currentIndex + 1 >= units.length) {
+      setDone(true)
+    } else {
+      setCurrentIndex((i) => i + 1)
+      setFeedback(null)
+    }
+  }
+
+  function checkAllCorrect(newInputs: string[]) {
+    const allCorrect = newInputs.every(
+      (v, i) => v.trim() === getExpected(i)
+    )
+    const allFilled = newInputs.every((v) => v.trim() !== '')
+
+    if (allFilled && allCorrect) {
+      advanceExercise(true)
+      setFeedback('correct')
+      setTimeout(() => goToNext(), 500)
+    }
+  }
+
+  // Decode: single letter per input
   function handleDecodeInput(index: number, value: string) {
     if (feedback !== null) return
     const char = value.slice(-1).toUpperCase()
     if (!char.match(/[A-Z]/)) return
 
-    const newInputs = [...decodeInputs]
+    const newInputs = [...inputs]
     newInputs[index] = char
-    setDecodeInputs(newInputs)
+    setInputs(newInputs)
 
-    // Check if this letter is correct
     const isCorrect = char === expectedLetters[index]
-    const newErrors = [...decodeErrors]
+    const newErrors = [...errors]
     newErrors[index] = !isCorrect
-    setDecodeErrors(newErrors)
+    setErrors(newErrors)
 
-    // Check if all filled and all correct
-    const allFilled = newInputs.every((v) => v !== '')
-    const allCorrect = newInputs.every(
-      (v, i) => v === expectedLetters[i]
-    )
+    checkAllCorrect(newInputs)
 
-    if (allFilled && allCorrect) {
-      advanceExercise(true)
-      setFeedback('correct')
-      // Auto-advance after brief delay
-      setTimeout(() => {
-        if (currentIndex + 1 >= units.length) {
-          setDone(true)
-        } else {
-          setCurrentIndex((i) => i + 1)
-          setAnswer('')
-          setFeedback(null)
-          setCorrectAnswer('')
-        }
-      }, 500)
-      return
-    }
-
-    // Jump to next empty input
     if (isCorrect) {
-      for (let i = index + 1; i < letterCount; i++) {
-        if (newInputs[i] === '') {
-          inputRefs.current[i]?.focus()
-          return
-        }
+      jumpToNextEmpty(newInputs, index)
+    }
+  }
+
+  // Encode: morse code per input, user types via buttons or keyboard
+  function handleEncodeInput(index: number, value: string) {
+    if (feedback !== null) return
+    // Only allow . - and space
+    const filtered = value.replace(/[^.\- ]/g, '')
+    const newInputs = [...inputs]
+    newInputs[index] = filtered
+    setInputs(newInputs)
+
+    const expected = getExpected(index)
+    const isCorrect = filtered.trim() === expected
+    const isWrong = filtered.trim() !== '' && !expected.startsWith(filtered.trim()) && filtered.trim() !== expected
+
+    const newErrors = [...errors]
+    newErrors[index] = isWrong
+    setErrors(newErrors)
+
+    if (isCorrect) {
+      checkAllCorrect(newInputs)
+      jumpToNextEmpty(newInputs, index)
+    }
+  }
+
+  function handleEncodeKeyDown(index: number, e: React.KeyboardEvent) {
+    if (feedback !== null) return
+    if (e.key === 'Backspace') {
+      if (inputs[index] === '' && index > 0) {
+        e.preventDefault()
+        inputRefs.current[index - 1]?.focus()
       }
-      // Wrap around
-      for (let i = 0; i < index; i++) {
-        if (newInputs[i] === '') {
-          inputRefs.current[i]?.focus()
-          return
+    } else if (e.key === 'Delete') {
+      e.preventDefault()
+      const newInputs = [...inputs]
+      newInputs[index] = ''
+      setInputs(newInputs)
+      const newErrors = [...errors]
+      newErrors[index] = false
+      setErrors(newErrors)
+    } else if (e.key === 'Tab' || e.key === 'Enter') {
+      // Let Tab work naturally; Enter moves to next
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        if (index + 1 < letterCount) {
+          inputRefs.current[index + 1]?.focus()
         }
       }
     }
   }
 
-  function handleDecodeKeyDown(index: number, e: React.KeyboardEvent) {
+  function jumpToNextEmpty(newInputs: string[], fromIndex: number) {
+    for (let i = fromIndex + 1; i < letterCount; i++) {
+      if (newInputs[i].trim() === '') {
+        inputRefs.current[i]?.focus()
+        return
+      }
+    }
+    for (let i = 0; i < fromIndex; i++) {
+      if (newInputs[i].trim() === '') {
+        inputRefs.current[i]?.focus()
+        return
+      }
+    }
+  }
+
+  function handleKeyDown(index: number, e: React.KeyboardEvent) {
     if (feedback !== null) return
     if (e.key === 'Backspace' || e.key === 'Delete') {
       e.preventDefault()
-      if (decodeInputs[index] !== '') {
-        // Clear current input
-        const newInputs = [...decodeInputs]
+      if (inputs[index] !== '') {
+        const newInputs = [...inputs]
         newInputs[index] = ''
-        setDecodeInputs(newInputs)
-        const newErrors = [...decodeErrors]
+        setInputs(newInputs)
+        const newErrors = [...errors]
         newErrors[index] = false
-        setDecodeErrors(newErrors)
+        setErrors(newErrors)
       } else if (e.key === 'Backspace' && index > 0) {
-        // Empty input + backspace: jump to previous and clear it
-        const newInputs = [...decodeInputs]
+        const newInputs = [...inputs]
         newInputs[index - 1] = ''
-        setDecodeInputs(newInputs)
-        const newErrors = [...decodeErrors]
+        setInputs(newInputs)
+        const newErrors = [...errors]
         newErrors[index - 1] = false
-        setDecodeErrors(newErrors)
+        setErrors(newErrors)
         inputRefs.current[index - 1]?.focus()
       }
     }
   }
 
-  function handleDecodeFocus(index: number) {
+  function handleFocus(index: number) {
+    setFocusedIndex(index)
     if (feedback !== null) return
-    // If there's already a value, move it to placeholder and clear
-    if (decodeInputs[index] !== '') {
-      const newInputs = [...decodeInputs]
+    if (direction === 'decode' && inputs[index] !== '') {
+      const newInputs = [...inputs]
       newInputs[index] = ''
-      setDecodeInputs(newInputs)
-      const newErrors = [...decodeErrors]
+      setInputs(newInputs)
+      const newErrors = [...errors]
       newErrors[index] = false
-      setDecodeErrors(newErrors)
+      setErrors(newErrors)
     }
   }
 
-  function handleEncodeSubmit() {
-    if (feedback !== null) return
-
-    const expected = getExpectedAnswer()
-    const isCorrect =
-      answer.trim().toLowerCase() === expected.toLowerCase()
-
-    advanceExercise(isCorrect)
-
-    if (isCorrect) {
-      setFeedback('correct')
-    } else {
-      setFeedback('wrong')
-      setCorrectAnswer(expected)
-    }
-  }
-
-  function handleNext() {
-    if (currentIndex + 1 >= units.length) {
-      setDone(true)
-    } else {
-      setCurrentIndex((i) => i + 1)
-      setAnswer('')
-      setFeedback(null)
-      setCorrectAnswer('')
-    }
-  }
-
+  // Morse button inserts into the currently focused encode input
   function handleMorseButton(char: string) {
     if (feedback !== null) return
-    setAnswer((prev) => prev + char)
+    const idx = focusedIndex
+    const newInputs = [...inputs]
+    newInputs[idx] = (newInputs[idx] ?? '') + char
+    setInputs(newInputs)
+
+    const expected = getExpected(idx)
+    const val = newInputs[idx].trim()
+    const isCorrect = val === expected
+    const isWrong = val !== '' && !expected.startsWith(val) && val !== expected
+
+    const newErrors = [...errors]
+    newErrors[idx] = isWrong
+    setErrors(newErrors)
+
+    if (isCorrect) {
+      checkAllCorrect(newInputs)
+      jumpToNextEmpty(newInputs, idx)
+    }
   }
 
-  function handleBackspace() {
+  function handleMorseBackspace() {
     if (feedback !== null) return
-    setAnswer((prev) => prev.slice(0, -1))
+    const idx = focusedIndex
+    const newInputs = [...inputs]
+    newInputs[idx] = (newInputs[idx] ?? '').slice(0, -1)
+    setInputs(newInputs)
+
+    const expected = getExpected(idx)
+    const val = newInputs[idx].trim()
+    const isWrong = val !== '' && !expected.startsWith(val) && val !== expected
+    const newErrors = [...errors]
+    newErrors[idx] = isWrong
+    setErrors(newErrors)
   }
 
   if (done) {
@@ -253,7 +296,7 @@ export default function MorseExercise() {
   return (
     <div>
       <div className="exercise-header">
-        <button className="btn btn-back" onClick={() => setLocation('/morse')}>
+        <button className="btn btn-back" onClick={() => setLocation('/morse-config')}>
           Back
         </button>
         <span className="exercise-type">
@@ -272,99 +315,68 @@ export default function MorseExercise() {
                 <span className="decode-morse">{morse}</span>
                 <input
                   ref={(el) => { inputRefs.current[i] = el }}
-                  className={`decode-letter-input${decodeErrors[i] ? ' input-error' : ''}`}
+                  className={`decode-letter-input${errors[i] ? ' input-error' : ''}`}
                   type="text"
                   maxLength={1}
-                  value={decodeInputs[i]}
-                  placeholder={decodeInputs[i] === '' && decodeErrors[i] ? '' : ''}
+                  value={inputs[i]}
                   onChange={(e) => handleDecodeInput(i, e.target.value)}
-                  onKeyDown={(e) => handleDecodeKeyDown(i, e)}
-                  onFocus={() => handleDecodeFocus(i)}
+                  onKeyDown={(e) => handleKeyDown(i, e)}
+                  onFocus={() => handleFocus(i)}
                   disabled={feedback !== null}
                 />
               </div>
             ))}
           </div>
-
-          {feedback === 'wrong' && (
-            <div className="feedback wrong">
-              <p>
-                Wrong! The answer is: <strong>{getExpectedAnswer()}</strong>
-              </p>
-              <div className="feedback-images">
-                {feedbackLetters.map((letter, i) => (
-                  <div key={i} className="feedback-letter">
-                    <img src={pngPath(letter)} alt={letter} />
-                    <span>
-                      {letter} = {MORSE_CODE[letter]}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {feedback === 'correct' && (
-            <div className="feedback correct">Correct!</div>
-          )}
         </>
       ) : (
         <>
-          <div className="exercise-prompt">{currentUnit.toUpperCase()}</div>
-
-          <input
-            className="exercise-input"
-            type="text"
-            value={answer}
-            readOnly
-            placeholder="Use buttons below"
-          />
-
-          <div className="exercise-actions">
-            {feedback === null ? (
-              <button className="btn" onClick={handleEncodeSubmit}>
-                Submit
-              </button>
-            ) : (
-              <button className="btn" onClick={handleNext}>
-                Next
-              </button>
-            )}
-            {feedback === null && (
-              <button className="btn btn-back" onClick={handleBackspace}>
-                Backspace
-              </button>
-            )}
-          </div>
-
-          {feedback === 'correct' && (
-            <div className="feedback correct">Correct!</div>
-          )}
-
-          {feedback === 'wrong' && (
-            <div className="feedback wrong">
-              <p>
-                Wrong! The answer is: <strong>{correctAnswer}</strong>
-              </p>
-              <div className="feedback-images">
-                {feedbackLetters.map((letter, i) => (
-                  <div key={i} className="feedback-letter">
-                    <img src={pngPath(letter)} alt={letter} />
-                    <span>
-                      {letter} = {MORSE_CODE[letter]}
-                    </span>
-                  </div>
-                ))}
+          <div className="decode-inputs">
+            {expectedLetters.map((letter, i) => (
+              <div key={i} className="decode-slot">
+                <span className="decode-morse">{letter}</span>
+                <input
+                  ref={(el) => { inputRefs.current[i] = el }}
+                  className={`encode-morse-input${errors[i] ? ' input-error' : ''}${focusedIndex === i ? ' input-focused' : ''}`}
+                  type="text"
+                  value={inputs[i]}
+                  onChange={(e) => handleEncodeInput(i, e.target.value)}
+                  onKeyDown={(e) => handleEncodeKeyDown(i, e)}
+                  onFocus={() => handleFocus(i)}
+                  disabled={feedback !== null}
+                  placeholder={MORSE_CODE[letter]}
+                />
               </div>
-            </div>
-          )}
+            ))}
+          </div>
 
           <div className="morse-buttons">
             <button onClick={() => handleMorseButton('.')}>.</button>
             <button onClick={() => handleMorseButton('-')}>-</button>
-            <button onClick={() => handleMorseButton(' ')}>&nbsp;</button>
+            <button onClick={handleMorseBackspace}>DEL</button>
           </div>
         </>
+      )}
+
+      {feedback === 'correct' && (
+        <div className="feedback correct">Correct!</div>
+      )}
+
+      {feedback === 'wrong' && (
+        <div className="feedback wrong">
+          <p>
+            Wrong! The answer is: <strong>{expectedLetters.map(l => MORSE_CODE[l]).join(' ')}</strong>
+          </p>
+          <div className="feedback-images">
+            {feedbackLetters.map((letter, i) => (
+              <div key={i} className="feedback-letter">
+                <img src={pngPath(letter)} alt={letter} />
+                <span>
+                  {letter} = {MORSE_CODE[letter]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   )

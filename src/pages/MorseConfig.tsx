@@ -29,24 +29,24 @@ export default function MorseConfig() {
       <h1>Exercise Configuration</h1>
       <div className="config-screen">
         <div className="config-group">
-          <label>Direction</label>
+          <label>Encode or decode</label>
           <div className="toggle-group">
-            <button
-              className={direction === 'decode' ? 'active' : ''}
-              onClick={() => setDirection('decode')}
-            >
-              Decode
-            </button>
             <button
               className={direction === 'encode' ? 'active' : ''}
               onClick={() => setDirection('encode')}
             >
               Encode
             </button>
+            <button
+              className={direction === 'decode' ? 'active' : ''}
+              onClick={() => setDirection('decode')}
+            >
+              Decode
+            </button>
           </div>
         </div>
         <div className="config-group">
-          <label>Unit</label>
+          <label>Content for each exercise</label>
           <div className="toggle-group">
             <button
               className={unit === 'letter' ? 'active' : ''}

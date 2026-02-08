@@ -208,6 +208,27 @@
   border-color: #dc3545;
 }
 
+.encode-morse-input {
+  width: 5rem;
+  height: 3rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-family: monospace;
+  font-weight: bold;
+  border: 2px solid #ccc;
+  border-radius: 0.5rem;
+}
+
+.encode-morse-input:focus,
+.encode-morse-input.input-focused {
+  outline: none;
+  border-color: #4a90d9;
+}
+
+.encode-morse-input.input-error {
+  border-color: #dc3545;
+}
+
 .morse-buttons {
   display: flex;
   width: 100%;
