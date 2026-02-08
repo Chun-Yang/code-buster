@@ -34,7 +34,7 @@ This project uses GitHub Actions for automatic deployment. Every push to the `ma
 1. Go to your repository Settings → Pages
 2. Under "Build and deployment", set Source to "GitHub Actions"
 3. Push your code to the `main` branch
-4. The site will be available at: `https://chunyang.github.io/code-buster/`
+4. The site will be available at: `https://chun-yang.github.io/code-buster/`
 
 ### Manual Deployment
 
