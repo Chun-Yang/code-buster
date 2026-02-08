@@ -1,18 +1,33 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'wouter'
-import { readFluencyRates, getAverageFluency } from '../morse'
+
+const SETTINGS_KEY = 'morse-config-settings'
+
+function readSettings(): { direction?: string; unit?: string } {
+  try {
+    return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')
+  } catch {
+    return {}
+  }
+}
+
+function saveSettings(direction: string, unit: string) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify({ direction, unit }))
+}
 
 export default function MorseConfig() {
-  const rates = readFluencyRates()
-  const avgFluency = getAverageFluency(rates)
+  const saved = readSettings()
 
-  const [direction, setDirection] = useState<'encode' | 'decode'>('decode')
+  const [direction, setDirection] = useState<'encode' | 'decode'>(
+    saved.direction === 'encode' ? 'encode' : saved.direction === 'decode' ? 'decode' : 'decode'
+  )
   const [unit, setUnit] = useState<'letter' | 'word'>(
-    avgFluency < 0.8 ? 'letter' : 'word'
+    saved.unit === 'letter' ? 'letter' : saved.unit === 'word' ? 'word' : 'letter'
   )
   const [, setLocation] = useLocation()
 
   function handleStart() {
+    saveSettings(direction, unit)
     setLocation(`/morse-exercise/${direction}/${unit}`)
   }
 

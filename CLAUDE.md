@@ -29,12 +29,13 @@ Don't use fixed position in css.
 ## Screen 2: exercise configeration screen
 - path "/morse-config"
 - Select encode or decode (default to decode)
-- Select word or letter (default to letter if average fluency rate is < 80%)
+- Select word or letter (default to letter)
 - A button to start at the top
     - When the user selects this button, the user will be redirected to "/morse-exercise" with the following query params
         - direction "encode" or "decode"
         - unit "word" or "letter"
 - A button to go back at top left
+- Remember the settings in local storage and use it to set the initial value
 
 ## Screen 3: exercise screen
 - path "/morse-exercise"
