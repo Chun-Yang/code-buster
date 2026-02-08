@@ -331,12 +331,13 @@ export default function MorseExercise() {
         <span className="exercise-type">
           {direction} {unit}
         </span>
-        <span className="exercise-progress">
-          {currentIndex + 1} / {units.length}
-        </span>
         <button className="btn" onClick={() => setShowHelp(true)}>
           Help
         </button>
+      </div>
+
+      <div className="exercise-progress">
+        {currentIndex + 1} / {units.length}
       </div>
 
       {direction === 'decode' ? (
