@@ -26,8 +26,11 @@
 
 .morse-cell img {
   width: 3rem;
-  height: 3rem;
-  object-fit: contain;
+  height: 2.5rem;
+  object-fit: cover;
+  object-position: top;
+  background-color: #dc5041;
+  border-radius: 0.5rem;
 }
 
 .morse-cell .letter {
