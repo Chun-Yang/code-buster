@@ -5,12 +5,9 @@ Don't use fixed position in css.
 
 ## Tech stack
 - react
-- router: wouter
+- router: wouter with hash based routing
 - typescript
 - no server, no login, a pure client app
-
-## Routing
-Since we are using github pages
 
 ## Screen 1: main/default screen to show morse code fluency and start an exercise
 - path "/morse", "/" redirects to "/morse"

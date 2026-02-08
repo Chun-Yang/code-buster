@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { useLocation, useSearch } from 'wouter'
+import { useLocation } from 'wouter'
 import {
   MORSE_CODE,
   readFluencyRates,
@@ -13,8 +13,9 @@ import {
 } from '../morse'
 
 export default function MorseExercise() {
-  const search = useSearch()
-  const params = new URLSearchParams(search)
+  const hash = window.location.hash
+  const queryString = hash.includes('?') ? hash.split('?')[1] : ''
+  const params = new URLSearchParams(queryString)
   const direction = params.get('direction') === 'encode' ? 'encode' : 'decode'
   const unit = params.get('unit') === 'word' ? 'word' : 'letter'
   const [, setLocation] = useLocation()
