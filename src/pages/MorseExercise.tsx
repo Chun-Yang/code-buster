@@ -106,7 +106,13 @@ export default function MorseExercise() {
 
   function goToNext() {
     if (currentIndex + 1 >= units.length) {
-      setDone(true)
+      if (unit === 'custom') {
+        setUnits([])
+        setCustomText('')
+        setFeedback(null)
+      } else {
+        setDone(true)
+      }
     } else {
       setCurrentIndex((i) => i + 1)
       setFeedback(null)
