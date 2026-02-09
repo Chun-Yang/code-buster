@@ -14,6 +14,8 @@ import {
 import DecodeExercise from '../components/DecodeExercise'
 import EncodeExercise from '../components/EncodeExercise'
 
+const EXERCISE_SIZE = 2;
+
 export default function MorseExercise() {
   const [, routeParams] = useRoute('/morse-exercise/:direction/:unit')
   const direction = routeParams?.direction === 'encode' ? 'encode' : 'decode'
@@ -24,9 +26,9 @@ export default function MorseExercise() {
 
   const units = useMemo(() => {
     if (unit === 'letter') {
-      return pickLetters(rates, 10)
+      return pickLetters(rates, EXERCISE_SIZE)
     } else {
-      return pickWords(rates, 10)
+      return pickWords(rates, EXERCISE_SIZE)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
