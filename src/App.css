@@ -336,3 +336,87 @@
 .summary h2 {
   margin-bottom: 1rem;
 }
+
+/* Top bar buttons */
+.top-bar-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Rate Screen */
+.rate-description {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.rate-columns {
+  display: flex;
+  gap: 1rem;
+}
+
+.rate-column {
+  flex: 1;
+}
+
+.rate-column h3 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.rate-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rate-table th,
+.rate-table td {
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  height: 2rem;
+}
+
+.rate-table th {
+  font-weight: bold;
+  border-bottom: 2px solid #ccc;
+}
+
+.rate-morse {
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.btn-danger {
+  background: #dc3545;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.confirm-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.confirm-dialog {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}

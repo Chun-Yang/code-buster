@@ -16,15 +16,8 @@ Don't use fixed position in css.
         - char (e.g. A)
         - png, each char has a corresponding png in public/morse that starts with it.
         - The image name without the suffix.
-        - background color (disabled for now): Each letter has a fluency rate
-            - A background color indicator will reflect this fluency rate (r)
-                - null (default) no color
-                - r < 0.9 yellow
-                - r >= 0.9 green
-            - The calculation of fluency rate is
-            - Store all fluency rates in a json, like this {"a": 0.8, "b": 0.9 ...}
-            - Read and Write fluency rate from localstorage
 - Need a button to start exercise, when clicked "exercise configeration screen" will show.
+- Need a button to show fluency score. When the user clicks the button, navigate to /morse-rate
 
 ## Screen 2: exercise configeration screen
 - path "/morse-config"
@@ -46,6 +39,7 @@ Don't use fixed position in css.
     - decode letter
     - decode word
 - In bellow, unit is either letter or word depending on which user selected before
+- There are two fluencyRate, EncodeFluencyRate and DecodeFluencyRate, each used by corresponding type of exercise.
 - Prepare some (count stored in EXERCISE_SIZE) non-repeat units and let user provide their answer.
   Show one unit at a time.
     - If there are letters whose fluencyRate is null, pick them first
@@ -72,3 +66,12 @@ Don't use fixed position in css.
     - Do not change the help cell content until the user clicks help again.
     - When help cell is shown, change the “Help” button to “Hide Help”
 - For each input, we consider the answer is wrong when it type in the wrong input or clicked help.
+
+## Screen 4: Fluency Score Screen
+- Add a title and some description
+- Add a back button to morse home
+- Use two columns to show two scores for encode and decode.
+    - For the encode column, show letter and score (from A to Z)
+    - For the decode column, show morse code and score (form A to Z)
+    - If the rate is null, dont show a number, otherwise show a digit to round to 2 digits after decimal points
+- Have a button to reset score and have a pop up for user to confirm.

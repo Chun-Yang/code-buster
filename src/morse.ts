@@ -60,19 +60,16 @@ export const PNG_FILES: Record<string, string> = {
   Z: 'Zebra.png',
 }
 
-const STORAGE_KEY = 'morse-fluency-rates'
+export type Direction = 'encode' | 'decode'
+
+const STORAGE_KEYS: Record<Direction, string> = {
+  encode: 'morse-encode-fluency-rates',
+  decode: 'morse-decode-fluency-rates',
+}
 
 export type FluencyRates = Record<string, number | null>
 
-export function readFluencyRates(): FluencyRates {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      return JSON.parse(stored)
-    }
-  } catch {
-    // ignore parse errors
-  }
+function emptyRates(): FluencyRates {
   const rates: FluencyRates = {}
   for (const letter of LETTERS) {
     rates[letter] = null
@@ -80,8 +77,25 @@ export function readFluencyRates(): FluencyRates {
   return rates
 }
 
-export function writeFluencyRates(rates: FluencyRates): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(rates))
+export function readFluencyRates(direction: Direction): FluencyRates {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS[direction])
+    if (stored) {
+      return JSON.parse(stored)
+    }
+  } catch {
+    // ignore parse errors
+  }
+  return emptyRates()
+}
+
+export function writeFluencyRates(direction: Direction, rates: FluencyRates): void {
+  localStorage.setItem(STORAGE_KEYS[direction], JSON.stringify(rates))
+}
+
+export function resetFluencyRates(): void {
+  localStorage.removeItem(STORAGE_KEYS.encode)
+  localStorage.removeItem(STORAGE_KEYS.decode)
 }
 
 export function updateFluencyRate(

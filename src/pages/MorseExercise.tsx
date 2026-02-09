@@ -22,7 +22,7 @@ export default function MorseExercise() {
   const unit = routeParams?.unit === 'word' ? 'word' : 'letter'
   const [, setLocation] = useLocation()
 
-  const [rates, setRates] = useState<FluencyRates>(readFluencyRates)
+  const [rates, setRates] = useState<FluencyRates>(() => readFluencyRates(direction))
 
   const units = useMemo(() => {
     if (unit === 'letter') {
@@ -88,7 +88,7 @@ export default function MorseExercise() {
       newRates[letters[i]] = updateFluencyRate(newRates[letters[i]], perInputCorrect[i])
     }
     setRates(newRates)
-    writeFluencyRates(newRates)
+    writeFluencyRates(direction, newRates)
 
     if (perInputCorrect.every(Boolean)) {
       setScore((s) => s + 1)
@@ -255,7 +255,6 @@ export default function MorseExercise() {
       {feedback === 'correct' && (
         <div className="feedback correct">Correct!</div>
       )}
-
     </div>
   )
 }
