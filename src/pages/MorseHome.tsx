@@ -2,13 +2,15 @@ import { Link } from 'wouter'
 import { LETTERS, PNG_FILES, readFluencyRates, pngPath } from '../morse'
 
 export default function MorseHome() {
-  const rates = readFluencyRates()
+  // const rates = readFluencyRates()
 
   function cellClass(letter: string): string {
-    const rate = rates[letter]
-    if (rate === null) return 'morse-cell'
-    if (rate >= 0.9) return 'morse-cell fluency-green'
-    return 'morse-cell fluency-yellow'
+    return 'morse-cell'
+    // DO NOT REMOVE, I may re use it later
+    // const rate = rates[letter]
+    // if (rate === null) return 'morse-cell'
+    // if (rate >= 0.9) return 'morse-cell fluency-green'
+    // return 'morse-cell fluency-yellow'
   }
 
   return (

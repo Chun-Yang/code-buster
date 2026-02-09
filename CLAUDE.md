@@ -16,7 +16,7 @@ Don't use fixed position in css.
         - char (e.g. A)
         - png, each char has a corresponding png in public/morse that starts with it.
         - The image name without the suffix.
-        - background color: Each letter has a fluency rate
+        - background color (disabled for now): Each letter has a fluency rate
             - A background color indicator will reflect this fluency rate (r)
                 - null (default) no color
                 - r < 0.9 yellow
