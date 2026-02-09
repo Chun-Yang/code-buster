@@ -19,6 +19,13 @@ export default function MorseRate() {
     return rate.toFixed(2)
   }
 
+  function scoreClass(rate: number | null): string {
+    if (rate === null) return ''
+    if (rate >= 0.9) return 'score-green'
+    if (rate >= 0.6) return 'score-yellow'
+    return 'score-red'
+  }
+
   return (
     <div>
       <div className="top-bar">
@@ -51,7 +58,7 @@ export default function MorseRate() {
               {LETTERS.map((letter) => (
                 <tr key={letter}>
                   <td>{letter}</td>
-                  <td>{formatRate(encodeRates[letter])}</td>
+                  <td>{encodeRates[letter] !== null && <span className={`score-badge ${scoreClass(encodeRates[letter])}`}>{formatRate(encodeRates[letter])}</span>}</td>
                 </tr>
               ))}
             </tbody>
@@ -70,7 +77,7 @@ export default function MorseRate() {
               {LETTERS.map((letter) => (
                 <tr key={letter}>
                   <td className="rate-morse">{MORSE_CODE[letter]}</td>
-                  <td>{formatRate(decodeRates[letter])}</td>
+                  <td>{decodeRates[letter] !== null && <span className={`score-badge ${scoreClass(decodeRates[letter])}`}>{formatRate(decodeRates[letter])}</span>}</td>
                 </tr>
               ))}
             </tbody>

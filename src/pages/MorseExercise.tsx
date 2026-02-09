@@ -14,7 +14,7 @@ import {
 import DecodeExercise from '../components/DecodeExercise'
 import EncodeExercise from '../components/EncodeExercise'
 
-const EXERCISE_SIZE = 2;
+const EXERCISE_SIZE = 10;
 
 export default function MorseExercise() {
   const [, routeParams] = useRoute('/morse-exercise/:direction/:unit')

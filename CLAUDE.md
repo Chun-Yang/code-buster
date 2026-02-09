@@ -75,3 +75,7 @@ Don't use fixed position in css.
     - For the decode column, show morse code and score (form A to Z)
     - If the rate is null, dont show a number, otherwise show a digit to round to 2 digits after decimal points
 - Have a button to reset score and have a pop up for user to confirm.
+- Fluency score has background with rounded border.
+    - Score >= 0.9 Green
+    - Score >= 0.6 and < 0.9 Yellow
+    - Score < 0.6 Red

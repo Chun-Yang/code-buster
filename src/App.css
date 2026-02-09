@@ -386,6 +386,25 @@
   font-weight: bold;
 }
 
+.score-badge {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+  font-weight: bold;
+}
+
+.score-green {
+  background-color: #a8e6a3;
+}
+
+.score-yellow {
+  background-color: #fff3a3;
+}
+
+.score-red {
+  background-color: #f8a3a3;
+}
+
 .btn-danger {
   background: #dc3545;
 }

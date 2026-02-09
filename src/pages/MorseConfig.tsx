@@ -42,6 +42,11 @@ export default function MorseConfig() {
         </button>
       </div>
       <h1>Exercise Configuration</h1>
+      <p>
+        The more you practice, the smarter the app gets.
+        It identifies the letters and codes you struggle with most,
+        then builds custom exercises to help you master them
+      </p>
       <div className="config-screen">
         <div className="config-group">
           <label>Encode or decode</label>
