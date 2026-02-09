@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useLocation, useRoute } from 'wouter'
 import {
   MORSE_CODE,
@@ -19,19 +19,18 @@ const EXERCISE_SIZE = 10;
 export default function MorseExercise() {
   const [, routeParams] = useRoute('/morse-exercise/:direction/:unit')
   const direction = routeParams?.direction === 'encode' ? 'encode' : 'decode'
-  const unit = routeParams?.unit === 'word' ? 'word' : 'letter'
+  const unit = routeParams?.unit === 'word' ? 'word' : routeParams?.unit === 'custom' ? 'custom' : 'letter'
   const [, setLocation] = useLocation()
 
   const [rates, setRates] = useState<FluencyRates>(() => readFluencyRates(direction))
 
-  const units = useMemo(() => {
-    if (unit === 'letter') {
-      return pickLetters(rates, EXERCISE_SIZE)
-    } else {
-      return pickWords(rates, EXERCISE_SIZE)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const [units, setUnits] = useState<string[]>(() => {
+    if (unit === 'custom') return []
+    if (unit === 'letter') return pickLetters(rates, EXERCISE_SIZE)
+    return pickWords(rates, EXERCISE_SIZE)
+  })
+
+  const [customText, setCustomText] = useState('')
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [feedback, setFeedback] = useState<'correct' | null>(null)
@@ -39,8 +38,17 @@ export default function MorseExercise() {
   const [score, setScore] = useState(0)
 
   const currentUnit = units[currentIndex] ?? ''
-  const expectedLetters = currentUnit.toUpperCase().split('')
+  const fullChars = currentUnit.toUpperCase().split('')
+  const expectedLetters = fullChars.filter(c => c !== ' ')
   const letterCount = expectedLetters.length
+
+  const charLayout: ({ type: 'letter'; letterIndex: number } | { type: 'space' })[] = (() => {
+    let letterIdx = 0
+    return fullChars.map(c => {
+      if (c === ' ') return { type: 'space' as const }
+      return { type: 'letter' as const, letterIndex: letterIdx++ }
+    })
+  })()
 
   const [inputs, setInputs] = useState<string[]>(() =>
     Array(letterCount).fill('')
@@ -57,7 +65,8 @@ export default function MorseExercise() {
   )
 
   useEffect(() => {
-    const len = (units[currentIndex] ?? '').length
+    const text = units[currentIndex] ?? ''
+    const len = text.split('').filter(c => c !== ' ').length
     setInputs(Array(len).fill(''))
     setErrors(Array(len).fill(false))
     setWrongInputs(Array(len).fill(false))
@@ -166,7 +175,7 @@ export default function MorseExercise() {
   const feedbackLetters =
     unit === 'letter'
       ? [currentUnit.toUpperCase()]
-      : currentUnit.toUpperCase().split('')
+      : expectedLetters
 
   const morseCodes = getMorseCodes()
 
@@ -217,6 +226,7 @@ export default function MorseExercise() {
     feedback,
     inputRefs,
     wrongInputs,
+    charLayout,
     setInputs,
     setErrors,
     setShowHelp,
@@ -226,6 +236,43 @@ export default function MorseExercise() {
     jumpToNextEmpty,
     getExpected,
     helpCell,
+  }
+
+  function handleConvert() {
+    const text = customText.toUpperCase().trim().replace(/\s+/g, ' ')
+    if (!text.replace(/ /g, '')) return
+    setUnits([text])
+  }
+
+  if (unit === 'custom' && units.length === 0) {
+    return (
+      <div>
+        <div className="exercise-header">
+          <button className="btn btn-back" onClick={() => setLocation('/morse-config')}>
+            Back
+          </button>
+          <span className="exercise-type">
+            {direction}
+          </span>
+        </div>
+        <div className="custom-input-section">
+          <label>Enter your text (letters and spaces only):</label>
+          <input
+            type="text"
+            className="custom-text-input"
+            value={customText}
+            onChange={(e) => setCustomText(e.target.value.replace(/[^a-zA-Z ]/g, ''))}
+          />
+          <button
+            className="btn"
+            onClick={handleConvert}
+            disabled={!customText.trim().replace(/ /g, '')}
+          >
+            Convert to Exercise
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (

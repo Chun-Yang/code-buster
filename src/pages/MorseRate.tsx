@@ -38,10 +38,7 @@ export default function MorseRate() {
         </button>
       </div>
       <p className="rate-description">
-        Track your fluency for encoding (letter to morse) and decoding (morse to letter).
-        Scores range from 0 to 1. Higher is better.
-        <br/>
-        Score will increase if you answer correctly and decrease when you answer incorrectly.
+        Track your mastery from 0 to 1. Correct answers boost your score, while mistakes lower it. Aim for a score above 0.9!
       </p>
 
       <div className="rate-columns">

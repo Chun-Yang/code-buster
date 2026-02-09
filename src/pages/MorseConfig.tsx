@@ -21,8 +21,8 @@ export default function MorseConfig() {
   const [direction, setDirection] = useState<'encode' | 'decode'>(
     saved.direction === 'encode' ? 'encode' : saved.direction === 'decode' ? 'decode' : 'decode'
   )
-  const [unit, setUnit] = useState<'letter' | 'word'>(
-    saved.unit === 'letter' ? 'letter' : saved.unit === 'word' ? 'word' : 'letter'
+  const [unit, setUnit] = useState<'letter' | 'word' | 'custom'>(
+    saved.unit === 'word' ? 'word' : saved.unit === 'custom' ? 'custom' : 'letter'
   )
   const [, setLocation] = useLocation()
 
@@ -64,6 +64,11 @@ export default function MorseConfig() {
               Decode
             </button>
           </div>
+          <p className="config-description">
+            {direction === 'encode'
+              ? 'See a letter, type the morse code'
+              : 'See morse code, type the letter'}
+          </p>
         </div>
         <div className="config-group">
           <label>Content for each exercise</label>
@@ -79,6 +84,12 @@ export default function MorseConfig() {
               onClick={() => setUnit('word')}
             >
               Word
+            </button>
+            <button
+              className={unit === 'custom' ? 'active' : ''}
+              onClick={() => setUnit('custom')}
+            >
+              Custom
             </button>
           </div>
         </div>

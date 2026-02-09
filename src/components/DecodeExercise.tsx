@@ -1,5 +1,7 @@
 import React from 'react'
 
+export type CharLayoutItem = { type: 'letter'; letterIndex: number } | { type: 'space' }
+
 export interface ExerciseInputProps {
   expectedLetters: string[]
   morseCodes: string[]
@@ -9,6 +11,7 @@ export interface ExerciseInputProps {
   feedback: 'correct' | 'wrong' | null
   inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>
   wrongInputs: boolean[]
+  charLayout: CharLayoutItem[]
   setInputs: (inputs: string[]) => void
   setErrors: (errors: boolean[]) => void
   setShowHelp: (show: boolean) => void
@@ -28,6 +31,7 @@ export default function DecodeExercise({
   feedback,
   inputRefs,
   wrongInputs,
+  charLayout,
   setInputs,
   setErrors,
   setShowHelp,
@@ -92,22 +96,28 @@ export default function DecodeExercise({
   return (
     <>
       <div className="decode-inputs">
-        {morseCodes.map((morse, i) => (
-          <div key={i} className="decode-slot">
-            <span className="decode-morse">{morse}</span>
-            <input
-              ref={(el) => { inputRefs.current[i] = el }}
-              className={`decode-letter-input${errors[i] ? ' input-error' : ''}`}
-              type="text"
-              maxLength={1}
-              value={inputs[i]}
-              onChange={(e) => handleInput(i, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(i, e)}
-              onFocus={() => handleFocus(i)}
-              disabled={feedback !== null}
-            />
-          </div>
-        ))}
+        {charLayout.map((item, i) => {
+          if (item.type === 'space') {
+            return <div key={i} className="decode-space" />
+          }
+          const idx = item.letterIndex
+          return (
+            <div key={i} className="decode-slot">
+              <span className="decode-morse">{morseCodes[idx]}</span>
+              <input
+                ref={(el) => { inputRefs.current[idx] = el }}
+                className={`decode-letter-input${errors[idx] ? ' input-error' : ''}`}
+                type="text"
+                maxLength={1}
+                value={inputs[idx]}
+                onChange={(e) => handleInput(idx, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(idx, e)}
+                onFocus={() => handleFocus(idx)}
+                disabled={feedback !== null}
+              />
+            </div>
+          )
+        })}
       </div>
       {helpCell}
     </>

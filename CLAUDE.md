@@ -22,7 +22,8 @@ Don't use fixed position in css.
 ## Screen 2: exercise configeration screen
 - path "/morse-config"
 - Select encode or decode (default to decode)
-- Select word or letter (default to letter)
+    - Show some short descirption for selected option
+- Select letter, word, or custom (default to letter)
 - A button to start at the top
     - When the user selects this button, the user will be redirected to "/morse-exercise" with the following query params
         - direction "encode" or "decode"
@@ -66,6 +67,9 @@ Don't use fixed position in css.
     - Do not change the help cell content until the user clicks help again.
     - When help cell is shown, change the “Help” button to “Hide Help”
 - For each input, we consider the answer is wrong when it type in the wrong input or clicked help.
+- When the user selects “custom”, provide one input box for a user to provide free form texts (only alphabet and space).
+  When the user clicks "convert to exercise", show letters or code depending on the “direction”.
+  For each letter/code provide a input. If there is space, don’t provide a input, make sure input and code/letter align.
 
 ## Screen 4: Fluency Score Screen
 - Add a title and some description

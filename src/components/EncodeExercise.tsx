@@ -9,6 +9,7 @@ export default function EncodeExercise({
   feedback,
   inputRefs,
   wrongInputs,
+  charLayout,
   setInputs,
   setErrors,
   setShowHelp,
@@ -123,21 +124,27 @@ export default function EncodeExercise({
   return (
     <>
       <div className="decode-inputs">
-        {expectedLetters.map((letter, i) => (
-          <div key={i} className="decode-slot">
-            <span className="decode-morse">{letter}</span>
-            <input
-              ref={(el) => { inputRefs.current[i] = el }}
-              className={`encode-morse-input${errors[i] ? ' input-error' : ''}${focusedIndex === i ? ' input-focused' : ''}`}
-              type="text"
-              value={inputs[i]}
-              onChange={(e) => handleInput(i, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(i, e)}
-              onFocus={() => handleFocus(i)}
-              disabled={feedback !== null}
-            />
-          </div>
-        ))}
+        {charLayout.map((item, i) => {
+          if (item.type === 'space') {
+            return <div key={i} className="decode-space" />
+          }
+          const idx = item.letterIndex
+          return (
+            <div key={i} className="decode-slot">
+              <span className="decode-morse">{expectedLetters[idx]}</span>
+              <input
+                ref={(el) => { inputRefs.current[idx] = el }}
+                className={`encode-morse-input${errors[idx] ? ' input-error' : ''}${focusedIndex === idx ? ' input-focused' : ''}`}
+                type="text"
+                value={inputs[idx]}
+                onChange={(e) => handleInput(idx, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(idx, e)}
+                onFocus={() => handleFocus(idx)}
+                disabled={feedback !== null}
+              />
+            </div>
+          )
+        })}
       </div>
       {helpCell}
 
