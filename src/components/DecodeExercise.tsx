@@ -8,11 +8,13 @@ export interface ExerciseInputProps {
   focusedIndex: number
   feedback: 'correct' | 'wrong' | null
   inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>
+  wrongInputs: boolean[]
   setInputs: (inputs: string[]) => void
   setErrors: (errors: boolean[]) => void
   setShowHelp: (show: boolean) => void
+  setWrongInputs: (wrongInputs: boolean[]) => void
   handleFocus: (index: number) => void
-  checkAllCorrect: (inputs: string[]) => void
+  checkAllCorrect: (inputs: string[], latestWrongInputs?: boolean[]) => void
   jumpToNextEmpty: (inputs: string[], fromIndex: number) => void
   getExpected: (index: number) => string
   helpCell: React.ReactNode
@@ -25,9 +27,11 @@ export default function DecodeExercise({
   errors,
   feedback,
   inputRefs,
+  wrongInputs,
   setInputs,
   setErrors,
   setShowHelp,
+  setWrongInputs,
   handleFocus,
   checkAllCorrect,
   jumpToNextEmpty,
@@ -48,7 +52,14 @@ export default function DecodeExercise({
     newErrors[index] = !isCorrect
     setErrors(newErrors)
 
-    checkAllCorrect(newInputs)
+    let newWrongInputs = wrongInputs
+    if (!isCorrect) {
+      newWrongInputs = [...wrongInputs]
+      newWrongInputs[index] = true
+      setWrongInputs(newWrongInputs)
+    }
+
+    checkAllCorrect(newInputs, newWrongInputs)
 
     if (isCorrect) {
       jumpToNextEmpty(newInputs, index)

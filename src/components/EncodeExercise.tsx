@@ -8,9 +8,11 @@ export default function EncodeExercise({
   focusedIndex,
   feedback,
   inputRefs,
+  wrongInputs,
   setInputs,
   setErrors,
   setShowHelp,
+  setWrongInputs,
   handleFocus,
   checkAllCorrect,
   jumpToNextEmpty,
@@ -35,8 +37,15 @@ export default function EncodeExercise({
     newErrors[index] = isWrong
     setErrors(newErrors)
 
+    let newWrongInputs = wrongInputs
+    if (isWrong) {
+      newWrongInputs = [...wrongInputs]
+      newWrongInputs[index] = true
+      setWrongInputs(newWrongInputs)
+    }
+
     if (isCorrect) {
-      checkAllCorrect(newInputs)
+      checkAllCorrect(newInputs, newWrongInputs)
       jumpToNextEmpty(newInputs, index)
     }
   }
@@ -83,8 +92,15 @@ export default function EncodeExercise({
     newErrors[idx] = isWrong
     setErrors(newErrors)
 
+    let newWrongInputs = wrongInputs
+    if (isWrong) {
+      newWrongInputs = [...wrongInputs]
+      newWrongInputs[idx] = true
+      setWrongInputs(newWrongInputs)
+    }
+
     if (isCorrect) {
-      checkAllCorrect(newInputs)
+      checkAllCorrect(newInputs, newWrongInputs)
       jumpToNextEmpty(newInputs, idx)
     }
   }

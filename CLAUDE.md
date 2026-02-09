@@ -71,3 +71,4 @@ Don't use fixed position in css.
 - Provide a help button. On click, show morse code cell in MorseHome for the most relevant letter. The most relevant letter is either the current select input or the first empty input. After the user provides any input, close the help section.
     - Do not change the help cell content until the user clicks help again.
     - When help cell is shown, change the “Help” button to “Hide Help”
+- For each input, we consider the answer is wrong when it type in the wrong input or clicked help.

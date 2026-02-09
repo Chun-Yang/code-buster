@@ -34,7 +34,7 @@ export default function MorseExercise() {
   }, [])
 
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
+  const [feedback, setFeedback] = useState<'correct' | null>(null)
   const [done, setDone] = useState(false)
   const [score, setScore] = useState(0)
 
@@ -52,11 +52,15 @@ export default function MorseExercise() {
   const [focusedIndex, setFocusedIndex] = useState(0)
   const [showHelp, setShowHelp] = useState(false)
   const [frozenHelpLetter, setFrozenHelpLetter] = useState('')
+  const [wrongInputs, setWrongInputs] = useState<boolean[]>(() =>
+    Array(letterCount).fill(false)
+  )
 
   useEffect(() => {
     const len = (units[currentIndex] ?? '').length
     setInputs(Array(len).fill(''))
     setErrors(Array(len).fill(false))
+    setWrongInputs(Array(len).fill(false))
     setFocusedIndex(0)
     setShowHelp(false)
     requestAnimationFrame(() => {
@@ -76,20 +80,17 @@ export default function MorseExercise() {
     }
   }
 
-  function advanceExercise(isCorrect: boolean) {
+  function advanceExercise(perInputCorrect: boolean[]) {
     const newRates = { ...rates }
-    const letters =
-      unit === 'letter'
-        ? [currentUnit]
-        : currentUnit.toUpperCase().split('')
+    const letters = expectedLetters
 
-    for (const letter of letters) {
-      newRates[letter] = updateFluencyRate(newRates[letter], isCorrect)
+    for (let i = 0; i < letters.length; i++) {
+      newRates[letters[i]] = updateFluencyRate(newRates[letters[i]], perInputCorrect[i])
     }
     setRates(newRates)
     writeFluencyRates(newRates)
 
-    if (isCorrect) {
+    if (perInputCorrect.every(Boolean)) {
       setScore((s) => s + 1)
     }
   }
@@ -103,14 +104,16 @@ export default function MorseExercise() {
     }
   }
 
-  function checkAllCorrect(newInputs: string[]) {
+  function checkAllCorrect(newInputs: string[], latestWrongInputs?: boolean[]) {
     const allCorrect = newInputs.every(
       (v, i) => v.trim() === getExpected(i)
     )
     const allFilled = newInputs.every((v) => v.trim() !== '')
 
     if (allFilled && allCorrect) {
-      advanceExercise(true)
+      const wrongs = latestWrongInputs ?? wrongInputs
+      const perInputCorrect = wrongs.map((w) => !w)
+      advanceExercise(perInputCorrect)
       setFeedback('correct')
       setTimeout(() => goToNext(), 500)
     }
@@ -174,10 +177,21 @@ export default function MorseExercise() {
     return expectedLetters[focusedIndex]
   }
 
+  function getHelpIndex(): number {
+    if (inputs[focusedIndex]?.trim() === '') return focusedIndex
+    const firstEmpty = inputs.findIndex((v) => v.trim() === '')
+    if (firstEmpty >= 0) return firstEmpty
+    return focusedIndex
+  }
+
   function handleHelpClick() {
     const letter = getHelpLetter()
     setFrozenHelpLetter(letter)
     setShowHelp(true)
+    const helpIdx = getHelpIndex()
+    const newWrong = [...wrongInputs]
+    newWrong[helpIdx] = true
+    setWrongInputs(newWrong)
   }
 
   const helpCell = showHelp && frozenHelpLetter && (
@@ -202,9 +216,11 @@ export default function MorseExercise() {
     focusedIndex,
     feedback,
     inputRefs,
+    wrongInputs,
     setInputs,
     setErrors,
     setShowHelp,
+    setWrongInputs,
     handleFocus,
     checkAllCorrect,
     jumpToNextEmpty,
@@ -240,23 +256,6 @@ export default function MorseExercise() {
         <div className="feedback correct">Correct!</div>
       )}
 
-      {feedback === 'wrong' && (
-        <div className="feedback wrong">
-          <p>
-            Wrong! The answer is: <strong>{expectedLetters.map(l => MORSE_CODE[l]).join(' ')}</strong>
-          </p>
-          <div className="feedback-images">
-            {feedbackLetters.map((letter, i) => (
-              <div key={i} className="feedback-letter">
-                <img src={pngPath(letter)} alt={letter} />
-                <span>
-                  {letter} = {MORSE_CODE[letter]}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
