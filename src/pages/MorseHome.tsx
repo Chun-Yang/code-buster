@@ -15,16 +15,14 @@ export default function MorseHome() {
 
   return (
     <div>
-      <div className="top-bar">
-        <h1>Morse Code</h1>
-        <div className="top-bar-buttons">
-          <Link to="/morse-rate">
-            <button className="btn btn-back">Fluency Score</button>
-          </Link>
-          <Link to="/morse-config">
-            <button className="btn">Start Exercise</button>
-          </Link>
-        </div>
+      <h1>Morse Code</h1>
+      <div className="home-buttons">
+        <Link to="/morse-config">
+          <button className="btn">Start Exercise</button>
+        </Link>
+        <Link to="/morse-rate">
+          <button className="btn btn-back">Fluency Score</button>
+        </Link>
       </div>
       <div className="morse-grid">
         {LETTERS.map((letter) => (

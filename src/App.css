@@ -341,6 +341,23 @@
   margin-bottom: 1rem;
 }
 
+/* Home buttons */
+.home-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-buttons .btn {
+  width: 100%;
+}
+
+.config-start-btn {
+  width: 100%;
+  margin-top: 1rem;
+}
+
 /* Config description */
 .config-description {
   color: #666;

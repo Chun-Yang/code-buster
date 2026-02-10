@@ -37,9 +37,6 @@ export default function MorseConfig() {
         <Link to="/morse">
           <button className="btn btn-back">Back</button>
         </Link>
-        <button className="btn" onClick={handleStart}>
-          Start
-        </button>
       </div>
       <h1>Exercise Configuration</h1>
       <p>
@@ -93,6 +90,9 @@ export default function MorseConfig() {
             </button>
           </div>
         </div>
+        <button className="btn config-start-btn" onClick={handleStart}>
+          Start
+        </button>
       </div>
     </div>
   )
