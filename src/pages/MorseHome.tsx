@@ -18,10 +18,15 @@ export default function MorseHome() {
       <h1>Morse Code</h1>
       <div className="home-buttons">
         <Link to="/morse-config">
-          <button className="btn">Start Exercise</button>
+          <button className="btn" style={{marginTop: '1rem'}}>
+            Start Exercise
+          </button>
         </Link>
         <Link to="/morse-rate">
           <button className="btn btn-back">Fluency Score</button>
+        </Link>
+        <Link to="/mnemonic">
+          <button className="btn btn-back">Mnemonic</button>
         </Link>
       </div>
       <div className="morse-grid">

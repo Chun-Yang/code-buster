@@ -494,3 +494,38 @@
   justify-content: center;
   margin-top: 1rem;
 }
+
+/* Mnemonic Screen */
+.mnemonic-group {
+  margin-bottom: 1.5rem;
+}
+
+.mnemonic-phrase {
+  text-transform: capitalize;
+  margin-bottom: 0.5rem;
+}
+
+.mnemonic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mnemonic-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0.5rem;
+  font-family: monospace;
+  font-size: 1.1rem;
+}
+
+.mnemonic-code {
+  min-width: 5rem;
+  font-weight: bold;
+}
+
+.mnemonic-letter {
+  font-weight: bold;
+  color: #4a90d9;
+}

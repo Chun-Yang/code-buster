@@ -18,6 +18,7 @@ Don't use fixed position in css.
         - The image name without the suffix.
 - Need a button to start exercise, when clicked "exercise configeration screen" will show.
 - Need a button to show fluency score. When the user clicks the button, navigate to /morse-rate
+- Need a button to go to /mnemonic
 
 ## Screen 2: exercise configeration screen
 - path "/morse-config"
@@ -83,3 +84,22 @@ Don't use fixed position in css.
     - Score >= 0.9 Green
     - Score >= 0.6 and < 0.9 Yellow
     - Score < 0.6 Red
+
+## Screen 5: Mnemonic
+Create sections that show the following mnemonic
+    - big lion fight viciously
+      _...
+      ._..
+      .._.
+      ..._
+    - jump yell quickly
+      .--- J
+      -.-- Y
+      --.- Q
+    - two-eyed animals
+      ..-
+      _..
+      __..
+    - giraffe wand
+      --.
+      .--
