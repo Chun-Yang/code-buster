@@ -120,6 +120,7 @@ export default function MorseExercise() {
   }
 
   function checkAllCorrect(newInputs: string[], latestWrongInputs?: boolean[]) {
+    if (newInputs.length !== letterCount) return
     const allCorrect = newInputs.every(
       (v, i) => v.trim() === getExpected(i)
     )
@@ -247,7 +248,12 @@ export default function MorseExercise() {
   function handleConvert() {
     const text = customText.toUpperCase().trim().replace(/\s+/g, ' ')
     if (!text.replace(/ /g, '')) return
+    const len = text.split('').filter(c => c !== ' ').length
     setUnits([text])
+    setInputs(Array(len).fill(''))
+    setErrors(Array(len).fill(false))
+    setWrongInputs(Array(len).fill(false))
+    setFocusedIndex(0)
   }
 
   if (unit === 'custom' && units.length === 0) {
