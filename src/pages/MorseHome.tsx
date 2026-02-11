@@ -14,8 +14,11 @@ export default function MorseHome() {
         <Link to="/morse-rate">
           <button className="btn btn-back">Fluency Score</button>
         </Link>
-        <Link to="/mnemonic">
+        <Link to="/morse-mnemonic">
           <button className="btn btn-back">Mnemonic</button>
+        </Link>
+        <Link to="/atbash">
+          <button className="btn btn-back">Atbash</button>
         </Link>
       </div>
       <div className="morse-grid">

@@ -20,7 +20,7 @@ const MNEMONIC_GROUPS = [
   },
 ]
 
-export default function Mnemonic() {
+export default function MorseMnemonic() {
   return (
     <div>
       <div className="top-bar">

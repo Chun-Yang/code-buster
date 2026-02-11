@@ -103,3 +103,22 @@ Create sections that show the following mnemonic
     - giraffe wand
       --.
       .--
+
+## Screen 6: Atbash
+/atbash
+Show mnemonic for 13 pairs
+A – Z first and last (not in the story)
+B – Y BY like bye
+C – X Cross(X)
+D – W DraW
+E – V loVE
+F – U FlU
+G – T GoaT
+H – S HiS
+I – R InneR
+J – Q Jack and Queen
+K – P KeeP
+L – O LOve
+M – N adjacent (not in the story)
+
+Jack draws a cross on a goat to keeps his inner love for the queen with flu.

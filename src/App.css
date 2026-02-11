@@ -530,6 +530,47 @@
   color: #4a90d9;
 }
 
+/* Atbash Screen */
+.atbash-story {
+  font-style: italic;
+  color: #555;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.atbash-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.atbash-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.atbash-letter {
+  font-weight: bold;
+  font-size: 1.2rem;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.atbash-dash {
+  color: #999;
+}
+
+.atbash-hint {
+  color: #666;
+  font-size: 0.95rem;
+}
+
 h1 {
   margin-bottom: 1rem;
 }
