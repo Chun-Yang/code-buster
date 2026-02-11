@@ -2,7 +2,7 @@ import { Link } from 'wouter'
 
 const ATBASH_PAIRS = [
   { left: 'A', right: 'Z', hint: 'first and last' },
-  { left: 'B', right: 'Y', hint: 'BY like bye' },
+  { left: 'B', right: 'Y', hint: 'BYe' },
   { left: 'C', right: 'X', hint: 'Cross(X)' },
   { left: 'D', right: 'W', hint: 'DraW' },
   { left: 'E', right: 'V', hint: 'loVE' },
@@ -20,14 +20,14 @@ export default function Atbash() {
   return (
     <div>
       <div className="top-bar">
-        <Link to="/morse">
+        <Link to="/">
           <button className="btn btn-back">Back</button>
         </Link>
       </div>
       <h1 style={{ textAlign: 'center' }}>Atbash Cipher</h1>
 
       <div className="atbash-story">
-        Jack draws a cross on a goat to keeps his inner love for the queen with flu.
+        MNEMONIC: Jack draws a cross on a goat to keep his inner love for the queen with flu.
       </div>
 
       <div className="atbash-list">

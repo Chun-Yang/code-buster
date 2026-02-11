@@ -1,6 +1,7 @@
 import './App.css'
-import { Route, Switch, Redirect, Router } from 'wouter'
+import { Route, Switch, Router } from 'wouter'
 import { useHashLocation } from 'wouter/use-hash-location'
+import Home from './pages/Home'
 import MorseHome from './pages/MorseHome'
 import MorseConfig from './pages/MorseConfig'
 import MorseExercise from './pages/MorseExercise'
@@ -13,6 +14,7 @@ function App() {
     <Router hook={useHashLocation}>
       <div className="App">
         <Switch>
+          <Route path="/" component={Home} />
           <Route path="/morse" component={MorseHome} />
           <Route path="/morse-config" component={MorseConfig} />
           <Route path="/morse-exercise/:direction/:unit" component={MorseExercise} />

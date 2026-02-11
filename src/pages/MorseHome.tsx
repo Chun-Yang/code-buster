@@ -4,6 +4,11 @@ import { LETTERS, PNG_FILES, pngPath } from '../morse'
 export default function MorseHome() {
   return (
     <div>
+      <div className="top-bar">
+        <Link to="/">
+          <button className="btn btn-back">Back</button>
+        </Link>
+      </div>
       <h1 style={{textAlign: 'center'}}>Morse Code</h1>
       <div className="home-buttons">
         <Link to="/morse-config">
@@ -16,9 +21,6 @@ export default function MorseHome() {
         </Link>
         <Link to="/morse-mnemonic">
           <button className="btn btn-back">Mnemonic</button>
-        </Link>
-        <Link to="/atbash">
-          <button className="btn btn-back">Atbash</button>
         </Link>
       </div>
       <div className="morse-grid">

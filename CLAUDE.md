@@ -108,7 +108,7 @@ Create sections that show the following mnemonic
 /atbash
 Show mnemonic for 13 pairs
 A – Z first and last (not in the story)
-B – Y BY like bye
+B – Y BY
 C – X Cross(X)
 D – W DraW
 E – V loVE
@@ -121,4 +121,7 @@ K – P KeeP
 L – O LOve
 M – N adjacent (not in the story)
 
-Jack draws a cross on a goat to keeps his inner love for the queen with flu.
+Jack draws a cross on a goat to keep his inner love for the queen with flu.
+
+## Screen 7: Root
+This is a home page, it has title “Code Buster” and contains two links: /morse and /atbash.
