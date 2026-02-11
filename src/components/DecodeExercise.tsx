@@ -24,7 +24,6 @@ export interface ExerciseInputProps {
 }
 
 export default function DecodeExercise({
-  expectedLetters,
   morseCodes,
   inputs,
   errors,
@@ -39,6 +38,7 @@ export default function DecodeExercise({
   handleFocus,
   checkAllCorrect,
   jumpToNextEmpty,
+  getExpected,
   helpCell,
 }: ExerciseInputProps) {
   function handleInput(index: number, value: string) {
@@ -51,7 +51,7 @@ export default function DecodeExercise({
     newInputs[index] = char
     setInputs(newInputs)
 
-    const isCorrect = char === expectedLetters[index]
+    const isCorrect = char === getExpected(index)
     const newErrors = [...errors]
     newErrors[index] = !isCorrect
     setErrors(newErrors)
