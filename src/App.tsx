@@ -8,6 +8,9 @@ import MorseExercise from './pages/MorseExercise'
 import MorseRate from './pages/MorseRate'
 import MorseMnemonic from './pages/MorseMnemonic'
 import Atbash from './pages/Atbash'
+import AtbashConfig from './pages/AtbashConfig'
+import AtbashExercise from './pages/AtbashExercise'
+import AtbashRate from './pages/AtbashRate'
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
           <Route path="/morse-rate" component={MorseRate} />
           <Route path="/morse-mnemonic" component={MorseMnemonic} />
           <Route path="/atbash" component={Atbash} />
+          <Route path="/atbash-config" component={AtbashConfig} />
+          <Route path="/atbash-exercise/:unit" component={AtbashExercise} />
+          <Route path="/atbash-rate" component={AtbashRate} />
         </Switch>
       </div>
     </Router>

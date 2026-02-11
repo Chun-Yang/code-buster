@@ -1,20 +1,5 @@
 import { Link } from 'wouter'
-
-const ATBASH_PAIRS = [
-  { left: 'A', right: 'Z', hint: 'first and last' },
-  { left: 'B', right: 'Y', hint: 'BYe' },
-  { left: 'C', right: 'X', hint: 'Cross(X)' },
-  { left: 'D', right: 'W', hint: 'DraW' },
-  { left: 'E', right: 'V', hint: 'loVE' },
-  { left: 'F', right: 'U', hint: 'FlU' },
-  { left: 'G', right: 'T', hint: 'GoaT' },
-  { left: 'H', right: 'S', hint: 'HiS' },
-  { left: 'I', right: 'R', hint: 'InneR' },
-  { left: 'J', right: 'Q', hint: 'Jack and Queen' },
-  { left: 'K', right: 'P', hint: 'KeeP' },
-  { left: 'L', right: 'O', hint: 'LOve' },
-  { left: 'M', right: 'N', hint: 'adjacent' },
-]
+import { ATBASH_PAIRS } from '../atbash'
 
 export default function Atbash() {
   return (
@@ -25,6 +10,15 @@ export default function Atbash() {
         </Link>
       </div>
       <h1 style={{ textAlign: 'center' }}>Atbash Cipher</h1>
+
+      <div className="home-buttons">
+        <Link to="/atbash-config">
+          <button className="btn">Start Exercise</button>
+        </Link>
+        <Link to="/atbash-rate">
+          <button className="btn btn-back">Fluency Score</button>
+        </Link>
+      </div>
 
       <div className="atbash-story">
         MNEMONIC: Jack draws a cross on a goat to keep his inner love for the queen with flu.
