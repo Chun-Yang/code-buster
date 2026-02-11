@@ -6,7 +6,7 @@ export default function MorseHome() {
     <div>
       <div className="top-bar">
         <Link to="/">
-          <button className="btn btn-back">Back</button>
+          <button className="btn btn-back">Home</button>
         </Link>
       </div>
       <h1 style={{textAlign: 'center'}}>Morse Code</h1>
