@@ -38,11 +38,11 @@ export default function MorseConfig() {
           <button className="btn btn-back">Back</button>
         </Link>
       </div>
-      <h1>Exercise Configuration</h1>
+      <h1 style={{textAlign: 'center'}}>Exercise Configuration</h1>
       <p>
-        The more you practice, the smarter the app gets.
+        The more you practice, the smarter the app gets. <br/>
         It identifies the letters and codes you struggle with most,
-        then builds custom exercises to help you master them
+        then builds custom exercises to help you master them.
       </p>
       <div className="config-screen">
         <div className="config-group">

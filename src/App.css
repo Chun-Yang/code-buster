@@ -127,15 +127,15 @@
 .exercise-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
   margin-bottom: 1rem;
 }
 
 .exercise-type {
-  flex: 1;
   font-size: 1.2rem;
   font-weight: bold;
   text-transform: capitalize;
+  text-align: center;
 }
 
 .exercise-progress {
@@ -528,4 +528,8 @@
 .mnemonic-letter {
   font-weight: bold;
   color: #4a90d9;
+}
+
+h1 {
+  margin-bottom: 1rem;
 }

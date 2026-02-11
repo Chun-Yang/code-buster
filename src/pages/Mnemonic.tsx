@@ -27,9 +27,8 @@ export default function Mnemonic() {
         <Link to="/morse">
           <button className="btn btn-back">Back</button>
         </Link>
-        <h1>Mnemonic</h1>
-        <div />
       </div>
+      <h1 style={{textAlign: 'center'}}>Mnemonic</h1>
 
       {MNEMONIC_GROUPS.map((group) => (
         <div key={group.phrase} className="mnemonic-group">

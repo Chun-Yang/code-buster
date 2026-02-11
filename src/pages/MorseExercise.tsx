@@ -165,15 +165,18 @@ export default function MorseExercise() {
 
   if (done) {
     return (
-      <div className="summary">
-        <h2>Exercise Complete</h2>
-        <p>
-          Score: {score} / {units.length}
-        </p>
-        <div className="exercise-actions">
-          <button className="btn" onClick={() => setLocation('/morse')}>
-            Home
+      <div>
+        <div className="exercise-header">
+          <button className="btn btn-back" onClick={() => setLocation('/morse')}>
+            Back
           </button>
+        </div>
+        <h1 className="exercise-type">{direction} {unit}</h1>
+        <div className="summary">
+          <h2>Exercise Complete</h2>
+          <p>
+            Score: {score} / {units.length}
+          </p>
         </div>
       </div>
     )
@@ -263,10 +266,8 @@ export default function MorseExercise() {
           <button className="btn btn-back" onClick={() => setLocation('/morse-config')}>
             Back
           </button>
-          <span className="exercise-type">
-            {direction}
-          </span>
         </div>
+        <h1 className="exercise-type">{direction}</h1>
         <div className="custom-input-section">
           <label>Enter your text (letters and spaces only):</label>
           <input
@@ -293,13 +294,11 @@ export default function MorseExercise() {
         <button className="btn btn-back" onClick={() => setLocation('/morse-config')}>
           Back
         </button>
-        <span className="exercise-type">
-          {direction} {unit}
-        </span>
         <button className="btn" onClick={showHelp ? () => setShowHelp(false) : handleHelpClick}>
           {showHelp ? 'Hide Help' : 'Help'}
         </button>
       </div>
+      <h1 className="exercise-type">{direction} {unit}</h1>
 
       <div className="exercise-progress">
         {currentIndex + 1} / {units.length}
