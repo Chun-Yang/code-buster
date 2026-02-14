@@ -8,6 +8,3 @@ Don't use fixed position in css.
 - router: wouter with hash based routing
 - typescript
 - no server, no login, a pure client app
-
-## TODO
-Implement similar /atbash-config, /atbash-exercise, /atbash-rate for atbash similar to morse code

@@ -15,7 +15,8 @@ import DecodeExercise from '../components/DecodeExercise'
 const EXERCISE_SIZE = 10
 
 export default function AtbashExercise() {
-  const [, routeParams] = useRoute('/atbash-exercise/:unit')
+  const [, routeParams] = useRoute('/atbash-exercise/:direction/:unit')
+  const direction = routeParams?.direction === 'decode' ? 'decode' : 'encode'
   const unit = routeParams?.unit === 'word' ? 'word' : routeParams?.unit === 'custom' ? 'custom' : 'letter'
   const [, setLocation] = useLocation()
 
@@ -36,7 +37,12 @@ export default function AtbashExercise() {
 
   const currentUnit = units[currentIndex] ?? ''
   const fullChars = currentUnit.toUpperCase().split('')
-  const expectedLetters = fullChars.filter(c => c !== ' ')
+  const originalLetters = fullChars.filter(c => c !== ' ')
+  // For decode: show encoded letters (user types originals back)
+  // For encode: show original letters (user types atbash pairs)
+  const expectedLetters = direction === 'decode'
+    ? originalLetters.map(l => ATBASH_MAP[l] ?? l)
+    : originalLetters
   const letterCount = expectedLetters.length
 
   const charLayout: ({ type: 'letter'; letterIndex: number } | { type: 'space' })[] = (() => {
@@ -86,6 +92,7 @@ export default function AtbashExercise() {
 
   function advanceExercise(perInputCorrect: boolean[]) {
     const newRates = { ...rates }
+    // Always track fluency based on the displayed letters (what user sees)
     const letters = expectedLetters
 
     for (let i = 0; i < letters.length; i++) {
@@ -166,7 +173,7 @@ export default function AtbashExercise() {
             Back
           </button>
         </div>
-        <h1 className="exercise-type">atbash {unit}</h1>
+        <h1 className="exercise-type">atbash {direction} {unit}</h1>
         <div className="summary">
           <h2>Exercise Complete</h2>
           <p>
@@ -282,7 +289,7 @@ export default function AtbashExercise() {
           {showHelp ? 'Hide Help' : 'Help'}
         </button>
       </div>
-      <h1 className="exercise-type">atbash {unit}</h1>
+      <h1 className="exercise-type">atbash {direction} {unit}</h1>
 
       <div className="exercise-progress">
         {currentIndex + 1} / {units.length}

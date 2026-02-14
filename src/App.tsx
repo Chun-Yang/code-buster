@@ -25,7 +25,7 @@ function App() {
           <Route path="/morse-mnemonic" component={MorseMnemonic} />
           <Route path="/atbash" component={Atbash} />
           <Route path="/atbash-config" component={AtbashConfig} />
-          <Route path="/atbash-exercise/:unit" component={AtbashExercise} />
+          <Route path="/atbash-exercise/:direction/:unit" component={AtbashExercise} />
           <Route path="/atbash-rate" component={AtbashRate} />
         </Switch>
       </div>

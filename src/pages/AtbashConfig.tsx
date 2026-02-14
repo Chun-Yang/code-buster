@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter'
 
 const SETTINGS_KEY = 'atbash-config-settings'
 
-function readSettings(): { unit?: string } {
+function readSettings(): { direction?: string; unit?: string } {
   try {
     return JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')
   } catch {
@@ -11,21 +11,24 @@ function readSettings(): { unit?: string } {
   }
 }
 
-function saveSettings(unit: string) {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify({ unit }))
+function saveSettings(direction: string, unit: string) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify({ direction, unit }))
 }
 
 export default function AtbashConfig() {
   const saved = readSettings()
 
+  const [direction, setDirection] = useState<'encode' | 'decode'>(
+    saved.direction === 'encode' ? 'encode' : saved.direction === 'decode' ? 'decode' : 'encode'
+  )
   const [unit, setUnit] = useState<'letter' | 'word' | 'custom'>(
     saved.unit === 'word' ? 'word' : saved.unit === 'custom' ? 'custom' : 'letter'
   )
   const [, setLocation] = useLocation()
 
   function handleStart() {
-    saveSettings(unit)
-    setLocation(`/atbash-exercise/${unit}`)
+    saveSettings(direction, unit)
+    setLocation(`/atbash-exercise/${direction}/${unit}`)
   }
 
   return (
@@ -42,6 +45,28 @@ export default function AtbashConfig() {
         then builds custom exercises to help you master them.
       </p>
       <div className="config-screen">
+        <div className="config-group">
+          <label>Encode or decode</label>
+          <div className="toggle-group">
+            <button
+              className={direction === 'encode' ? 'active' : ''}
+              onClick={() => setDirection('encode')}
+            >
+              Encode
+            </button>
+            <button
+              className={direction === 'decode' ? 'active' : ''}
+              onClick={() => setDirection('decode')}
+            >
+              Decode
+            </button>
+          </div>
+          <p className="config-description">
+            {direction === 'encode'
+              ? 'See a letter, type the atbash pair'
+              : 'See atbash cipher, type the original letter'}
+          </p>
+        </div>
         <div className="config-group">
           <label>Content for each exercise</label>
           <div className="toggle-group">
