@@ -11,6 +11,9 @@ export default function Home() {
         <Link to="/atbash">
           <button className="btn">Atbash</button>
         </Link>
+        <Link to="/tapcode">
+          <button className="btn">Tap Code</button>
+        </Link>
       </div>
     </div>
   )

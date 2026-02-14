@@ -580,6 +580,52 @@
   background: #f9f9f9;
 }
 
+/* Tap Code Grid */
+.tapcode-grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.tapcode-grid th,
+.tapcode-grid td {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  font-size: 1.1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.tapcode-grid th {
+  background: #f0f0f0;
+  font-weight: bold;
+}
+
+.tapcode-buttons {
+  display: flex;
+  width: 100%;
+  height: 5rem;
+  gap: 2px;
+}
+
+.tapcode-buttons button {
+  flex: 1;
+  font-size: 1.8rem;
+  border: none;
+  background: #e8e8e8;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.tapcode-buttons button:hover {
+  background: #d0d0d0;
+}
+
+.tapcode-buttons button:active {
+  background: #b8b8b8;
+}
+
 h1 {
   margin-bottom: 1rem;
 }

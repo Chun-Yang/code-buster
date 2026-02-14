@@ -11,6 +11,10 @@ import Atbash from './pages/Atbash'
 import AtbashConfig from './pages/AtbashConfig'
 import AtbashExercise from './pages/AtbashExercise'
 import AtbashRate from './pages/AtbashRate'
+import TapCode from './pages/TapCode'
+import TapCodeConfig from './pages/TapCodeConfig'
+import TapCodeExercise from './pages/TapCodeExercise'
+import TapCodeRate from './pages/TapCodeRate'
 
 function App() {
   return (
@@ -27,6 +31,10 @@ function App() {
           <Route path="/atbash-config" component={AtbashConfig} />
           <Route path="/atbash-exercise/:direction/:unit" component={AtbashExercise} />
           <Route path="/atbash-rate" component={AtbashRate} />
+          <Route path="/tapcode" component={TapCode} />
+          <Route path="/tapcode-config" component={TapCodeConfig} />
+          <Route path="/tapcode-exercise/:direction/:unit" component={TapCodeExercise} />
+          <Route path="/tapcode-rate" component={TapCodeRate} />
         </Switch>
       </div>
     </Router>
